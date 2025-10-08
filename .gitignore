@@ -1,0 +1,39 @@
+# Python cache / compiled
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+env/
+venv/
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs.txt
+
+# Results & experiment outputs (reproducible)
+results/*
+!results/**/README.md
+
+# Data: ignore all except demo
+data/*
+!data/demo/**
+!data/**/README.md
+
+# Config artifacts (temp)
+*.yaml~
+*.yml~
+
+# IDE / editor settings
+.vscode/
+.idea/

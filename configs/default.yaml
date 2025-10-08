@@ -1,0 +1,26 @@
+# Default configuration for SIRF (Spatial Information Reconstruction Framework)
+
+data:
+  dataset: "demo"          # options: folder name
+  data_dir: "data"          # where datasets are stored
+  node_file: "bus.csv"      # expected input file name
+  link_file: "branch.csv"
+
+searching:
+  enable: true          # enable searching step
+  country: "Korea"      # add term for geocoding queries
+  component_n: 1         # how many largest connected components
+
+
+inference:
+  enable: true          # enable inference step
+  retention_rate: 1.0   # for test if set < 1.0, randomly drop some nodes' coordinates
+  iter_num: 33         # ensemble number in the sequence. (0-9999)
+  regression_poly_degree: 1   # regression degree: fixed at 1
+  include_bias: false    # include bias term in regression
+  iter_n: 10000         # max number of iteration in optimization
+  filter_n: 3           # Number of filtering iterations
+  num_seed: 42          # random seed for sampling
+
+logging:
+  level: "INFO"         # Logging level (DEBUG, INFO, WARNING, ERROR)
