@@ -31,9 +31,13 @@ data/*
 !data/demo
 !data/**/README.md
 
-# Configs: ignore all except demo
+# Configs: ignore all except default
 configs/*
 !configs/default.yaml
+
+# PSS/E: ignore all except code
+psse_to_datafile/*
+!psse_to_datafile/psse_to_csv.py
 
 # Config artifacts (temp)
 *.yaml~

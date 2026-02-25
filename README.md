@@ -16,7 +16,7 @@ This repository contains the source code, configuration files, and demo dataset 
 The framework (SIRF) reconstructs missing geographic coordinates of power grid datasets that contain network topology, facility names, and line parameters, but lack coordinate information.  
 
 The implementation consists of two main procedures:
-1. **Searching procedure** – Extract facility names and retrieve geographic coordinates from open data sources (implemented here with the `geopy` library and OpenStreetMap Nominatim).
+1. **Searching procedure** – Extract facility names and retrieve geographic coordinates from open data sources (implemented here with the `geopy` library and OpenStreetMap `Nominatim`). Note that our results were obtained using the `Google Maps Geocoding API`, which may yield higher accuracy than the default Nominatim implementation.
 2. **Inference and Refining procedure** – Apply spatial inference through coordinate initialization, regression-based distance estimation, gradient-based optimization, anchor node reclassification, and dangling node repositioning.  
    *(This implementation runs a single-pass, non-ensemble pipeline; no coordinate averaging step is included.)*
 
