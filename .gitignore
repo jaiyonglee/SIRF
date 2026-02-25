@@ -24,6 +24,7 @@ logs.txt
 # Results & experiment outputs (reproducible)
 results/*
 !results/**/README.md
+!results/reconstructed
 
 # Data: ignore all except demo
 data/*
