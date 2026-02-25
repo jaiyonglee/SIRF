@@ -27,8 +27,12 @@ results/*
 
 # Data: ignore all except demo
 data/*
-!data/demo/**
+!data/demo
 !data/**/README.md
+
+# Configs: ignore all except demo
+configs/*
+!configs/default.yaml
 
 # Config artifacts (temp)
 *.yaml~

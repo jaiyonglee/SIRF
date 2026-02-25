@@ -62,7 +62,9 @@ def regress_link_data(df_branch, regression_poly_degree, include_bias=True):
     # Create a dataframe about coef
     df_coef = pd.DataFrame([coef], columns=model.named_steps["poly"].get_feature_names_out())
 
-    return df_branch_copy, df_coef
+    corr = df_branch_copy["Predicted_distance"].corr(df_branch_copy["Distance"])
+
+    return df_branch_copy, df_coef, corr
 
 
 # Get figure of the regression

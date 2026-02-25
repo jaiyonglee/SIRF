@@ -46,7 +46,7 @@ def _get_params(cfg: Dict[str, Any]) -> Dict[str, Any]:
         "iter_num": int(inf.get("iter_num", 0)),
         "regression_poly_degree": int(inf.get("regression_poly_degree", 2)),
         "iter_n": int(inf.get("iter_n", 500)),
-        "filter_n": int(inf.get("filter_n", 0)),
+        "min_corr": float(inf.get("min_corr", 0.9)),
         "num_seed": int(inf.get("num_seed", 42)),
         "include_bias": bool(inf.get("include_bias", True)),
     }
@@ -90,11 +90,12 @@ def run(bus: pd.DataFrame, branch: pd.DataFrame, cfg: Dict[str, Any]) -> Tuple[p
     df_bus_nan    = pd.read_csv(res / f"Preprocessed_data/Nan_position/Bus_nan_{suf}.csv")
     df_branch_detailed = pd.read_csv(res / f"Preprocessed_data/Detailed_branch/Branch_detailed_{suf}.csv")
 
-    df_branch_regressed, df_coef = regress_link_data(
+    df_branch_regressed, df_coef, corr = regress_link_data(
         df_branch_detailed,
         regression_poly_degree=P["regression_poly_degree"],
         include_bias=P["include_bias"],
     )
+    print(f"1st infer correlation: {corr}")
 
     _save_csv(df_branch_regressed, res, f"Regressed_data/Regressed_branch/Branch_regressed_{suf}.csv")
     _save_csv(df_coef,             res, f"Regressed_data/Model/Model_regressed_{suf}.csv")
@@ -134,32 +135,33 @@ def run(bus: pd.DataFrame, branch: pd.DataFrame, cfg: Dict[str, Any]) -> Tuple[p
     loss_per_node_changes: List[float] = []
     node_to_add_list: List[Any] = []
 
-    if P["filter_n"] > 0:
+    i_n = 0
+    while(corr < P["min_corr"]):
         # reload original branch if needed by filter_data (keep semantics similar to legacy)
         # Here we use the *input* branch given to run(), not from disk.
-        for i in range(P["filter_n"]):
-            logging.info(f"[infer] filtering+reinfer iteration {i+1}/{P['filter_n']}")
-            df_bus_nan, node_to_add = filter_data(df_bus_inferred, df_branch_inferred, df_bus_nan, outputs)
+        i_n += 1
+        df_bus_nan, node_to_add = filter_data(df_bus_inferred, df_branch_inferred, df_bus_nan, outputs)
 
-            # re-regress with updated inferred branch
-            df_branch_regressed, df_coef = regress_link_data(
-                df_branch_inferred,
-                regression_poly_degree=P["regression_poly_degree"],
-                include_bias=P["include_bias"],
-            )
-            # replace predicted distance
-            df_branch_inferred["Predicted_distance"] = df_branch_regressed["Predicted_distance"]
+        # re-regress with updated inferred branch
+        df_branch_regressed, df_coef, corr = regress_link_data(
+            df_branch_inferred,
+            regression_poly_degree=P["regression_poly_degree"],
+            include_bias=P["include_bias"],
+        )
+        # replace predicted distance
+        df_branch_inferred["Predicted_distance"] = df_branch_regressed["Predicted_distance"]
+        logging.info(f"[infer] filtering+reinfer iteration {i_n}, current correlation {corr}")
 
-            # re-infer
-            df_bus_inferred, df_branch_inferred, outputs = infer_position(
-                df_bus_inferred,
-                df_branch_inferred,
-                df_bus_nan,
-                outputs=outputs,
-                iter_n=P["iter_n"],
-            )
-            loss_per_node_changes.append(outputs["loss"][-1])
-            node_to_add_list.append(node_to_add)
+        # re-infer
+        df_bus_inferred, df_branch_inferred, outputs = infer_position(
+            df_bus_inferred,
+            df_branch_inferred,
+            df_bus_nan,
+            outputs=outputs,
+            iter_n=P["iter_n"],
+        )
+        loss_per_node_changes.append(outputs["loss"][-1])
+        node_to_add_list.append(node_to_add)
 
         # Save (re)regressed artifacts too, mirroring legacy layout
         _save_csv(df_branch_regressed, res, f"Regressed_data/Regressed_branch/Branch_regressed_{suf}.csv")

@@ -41,9 +41,34 @@ def run(cfg: dict):
         bus_df, branch_df = search.run(cfg)
     else:
         logging.info("[sirf] Skipping searching (searching.enable = false)")
-        results_root = Path(cfg["data"]["data_dir"]).resolve().parent / "results" / dataset / "Searched_data"
-        bus_df = pd.read_csv(results_root / "bus.csv")
-        branch_df = pd.read_csv(results_root / "branch.csv")
+
+        data_dir = Path(cfg["data"]["data_dir"]).resolve()
+        dataset = cfg["data"]["dataset"]
+        bus_file = cfg["data"].get("node_file", "bus.csv")
+        branch_file = cfg["data"].get("link_file", "branch.csv")
+
+        results_root = data_dir.parent / "results" / dataset / "Searched_data"
+        results_root.mkdir(parents=True, exist_ok=True)
+
+        bus_path = results_root / "bus.csv"
+        branch_path = results_root / "branch.csv"
+
+        # 1) 이미 있으면 읽기
+        if bus_path.exists() and branch_path.exists():
+            bus_df = pd.read_csv(bus_path)
+            branch_df = pd.read_csv(branch_path)
+
+        # 2) 없으면 "원본 입력"을 읽어서 동일 이름/경로로 저장 (Facility_name 없어도 OK)
+        else:
+            logging.info("[sirf] Searched_data files not found. Creating them by copying raw inputs.")
+            raw_bus_path = data_dir / dataset / bus_file
+            raw_branch_path = data_dir / dataset / branch_file
+
+            bus_df = pd.read_csv(raw_bus_path)
+            branch_df = pd.read_csv(raw_branch_path)
+
+            bus_df.to_csv(bus_path, index=False)
+            branch_df.to_csv(branch_path, index=False)
 
     # === 결측치 체크 ===
     if bus_df[["Latitude_truth", "Longitude_truth"]].notna().all().all():
