@@ -22,6 +22,18 @@ The implementation consists of two main procedures:
 
 ---
 
+## Ethical Use
+
+SIRF is intended for reproducible spatial analysis of power grid datasets 
+using legally accessible data sources. Users are encouraged to apply this 
+framework solely for research purposes, notify relevant data owners prior 
+to redistributing reconstructed coordinates, and specify applicable use 
+conditions when releasing outputs publicly. The authors do not endorse any 
+use of this tool that may compromise the security or confidentiality of 
+critical infrastructure.
+
+---
+
 ## Requirements
 - Python >= 3.11
 - Conda environment recommended
