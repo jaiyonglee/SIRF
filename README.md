@@ -4,10 +4,14 @@ This repository provides the official implementation for reproducing the results
 
 **Spatial information reconstruction framework for power grid datasets without geographic coordinates**  
 Jaiyong Lee[1], Daekyung Lee[1,2], Heetae Kim[1,†]  
-1 Department of Energy Technology, Korea Institute of Energy Technology (KENTECH)  
+
+*Scientific Reports* (2026)  
+[https://doi.org/10.1038/s41598-026-62490-7](https://doi.org/10.1038/s41598-026-62490-7)
+
+1 Department of Energy Engineering, Korea Institute of Energy Technology (KENTECH)  
 2 Supply Chain Intelligence Institute Austria, Vienna, Austria  
 
-† hkim@kentech.ac.kr  
+† hkim@kentech.ac.kr
 
 ---
 
