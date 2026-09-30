@@ -98,11 +98,12 @@ File format:
 
 If you use this repository, please cite our paper:
 
-@article{sirf,
-  title   = {Spatial information reconstruction framework for power grid datasets without geographic coordinates},
-  author  = {Jaiyong Lee, Daekyung Lee, and Heetae Kim},
-  journal = {},
-  year    = {2026}
+@article{lee2026spatial,
+  title={Spatial information reconstruction framework for power grid datasets without geographic coordinates},
+  author={Lee, Jaiyong and Lee, Daekyung and Kim, Heetae},
+  journal={Scientific Reports},
+  year={2026},
+  publisher={Nature Publishing Group UK London}
 }
 
 
